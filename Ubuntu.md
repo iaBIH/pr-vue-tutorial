@@ -37,7 +37,7 @@
  
 - Create a desktop app from a website using electron
 
-       vue add electron-builder
+       vue add electron-builder -mwl
        
     to run the desktop app
 
@@ -47,6 +47,13 @@
        
        yarn electron:build
 
+    to build for different system       
 
 
 
+
+Resources:
+
+- [Create vue js app in 5 minutes](https://www.blog.duomly.com/vue-js-tutorial-how-to-create-vue-js-app-in-5-minutes)
+- [Electron with Vue.js](https://www.youtube.com/watch?v=Fl7---SEORQ)
+- [Vue CLI plugin electron builder](https://github.com/nklayman/vue-cli-plugin-electron-builder)
