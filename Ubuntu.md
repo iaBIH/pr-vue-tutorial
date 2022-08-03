@@ -5,7 +5,7 @@
       echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list
       sudo apt update 
       sudo apt install -y yarn
-      export PATH=$PATH:~/.config/yarn/global/node_modules/.bin 
+      echo "export PATH=$PATH:~/.config/yarn/global/node_modules/.bin" >> ~/.bashrc
 
 - Install node
 
@@ -47,7 +47,13 @@
        
        yarn electron:build
 
-    to build for different system       
+    to build for different system : you need to compile at different systems:
+
+       // first install dependencies 
+       yarn install   
+       // build the executable app
+       yarn build
+
 
 
 
