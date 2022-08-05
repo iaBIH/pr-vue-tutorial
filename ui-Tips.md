@@ -47,3 +47,11 @@
 
    - keycloak
    - google or github
+
+# Using Java backend:
+
+https://medium.com/bb-tutorials-and-thoughts/how-to-develop-and-build-vue-js-app-with-java-backend-4e9d72bb8ce5
+
+Use Arx API: 
+  - Run arx Example1 by reading data file
+  - Display the result

@@ -55,8 +55,19 @@
        yarn build
 
 
+# To connect with java:
 
-
+First create a Spring Boot Project 
+ 
+    - https://start.spring.io/
+    - run spring project:
+        ./mvnw spring-boot:run
+    -  add java class as described here: https://www.youtube.com/watch?v=hDC_kNlzz6c 
+    -  Create vue project
+    -  yarn add bootstrap     
+    -  yarn add popperjs
+    - yarn add axios
+    -  add java service as described here: https://www.youtube.com/watch?v=hDC_kNlzz6c 
 
 Resources:
 
