@@ -18,6 +18,7 @@ Part of practical tutorials for full stack development:
       - Write build instructions
       - Run as web app and desktop app
     - Send data from frontend to backend!
+      - the current commit send a string, next: try to send a complete text file        
     - Secure the transmitted data
     - Send files: e.g. upload data file and send it to arx then get the result as file 
     - Add more UI elements!

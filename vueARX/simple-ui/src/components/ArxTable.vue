@@ -1,6 +1,6 @@
 <template>
   <div class="arx">
-    <h1>{{ msg }}</h1>
+    <h3>{{ msg }}</h3>
 
      <table class="table table-striped">
       <thead>

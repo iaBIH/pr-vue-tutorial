@@ -20,9 +20,9 @@ import javax.persistence.Table;
 @AllArgsConstructor
 @Builder
 @Entity
-@Table(name = "emps")
+@Table(name = "pats")
 
-public class Emp {
+public class Pat {
 
     @Id
     @GeneratedValue(strategy =  GenerationType.IDENTITY)

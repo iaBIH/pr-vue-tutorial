@@ -8,19 +8,19 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import net.javaguides.sbBE.entity.Emp;
-import net.javaguides.sbBE.repo.EmpRepo;
+import net.javaguides.sbBE.entity.Pat;
+import net.javaguides.sbBE.repo.PatRepo;
 
 @RestController
 @RequestMapping("/api")
 @CrossOrigin("http://localhost:8080")
-public class EmpControl  {
+public class PatControl  {
     
     @Autowired
-    private EmpRepo empRepo;
+    private PatRepo empRepo;
 
-    @GetMapping("/emps")
-    public List<Emp> fetchEmps(){
+    @GetMapping("/pats")
+    public List<Pat> fetchEmps(){
         return empRepo.findAll();
     }
     

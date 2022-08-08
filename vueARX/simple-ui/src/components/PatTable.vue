@@ -1,6 +1,6 @@
 <template>
-  <div class="emps">
-    <h1>{{ msg }}</h1>
+  <div class="pats">
+    <h3>{{ msg }}</h3>
 
      <table class="table table-striped">
       <thead>
@@ -9,10 +9,10 @@
          <th> Age</th>   
       </thead>
       <tbody>
-         <tr v-for ="emp in emps" v-bind:key = "emp.id">
-           <td> {{emp.id}}</td>
-           <td> {{emp.name}}</td>
-           <td> {{emp.age}}</td>
+         <tr v-for ="pat in pats" v-bind:key = "pat.id">
+           <td> {{pat.id}}</td>
+           <td> {{pat.name}}</td>
+           <td> {{pat.age}}</td>
          </tr>
       </tbody>
      </table>
@@ -20,26 +20,26 @@
 </template>
 
 <script>
-import EmpsService from '@/services/EmpsService'
+import PatsService from '@/services/PatsService'
 
 export default {
-  name: 'EmpTable',
+  name: 'PatTable',
   data(){
      return  { 
       msg : "Welcome to Java World!",
-      emps : []
+      pats : []
      }
   },
   methods:{
-     getEmps(){
-      EmpsService.getEmps().then( 
+     getPats(){
+      PatsService.getPats().then( 
         (response) =>{
-             this.emps = response.data;
+             this.pats = response.data;
       });
      }              
   },
   created(){
-   this.getEmps()
+   this.getPats()
   }
 }
 </script>

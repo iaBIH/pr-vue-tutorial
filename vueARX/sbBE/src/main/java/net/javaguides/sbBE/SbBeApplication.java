@@ -9,15 +9,17 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import com.google.common.collect.Iterators;
 
 import net.javaguides.sbBE.entity.ArxData;
-import net.javaguides.sbBE.entity.Emp;
+import net.javaguides.sbBE.entity.Pat;
 import net.javaguides.sbBE.repo.ArxRepo;
-import net.javaguides.sbBE.repo.EmpRepo;
+import net.javaguides.sbBE.repo.PatRepo;
 
 
 //ARX
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
+import java.util.List;
 
 import org.deidentifier.arx.ARXAnonymizer;
 import org.deidentifier.arx.ARXConfiguration;
@@ -37,7 +39,7 @@ public class SbBeApplication implements CommandLineRunner {
 	}
 
 	@Autowired
-	private EmpRepo empRepo;
+	private PatRepo patRepo;
 
 	@Autowired
 	private ArxRepo arxRepo;
@@ -46,8 +48,41 @@ public class SbBeApplication implements CommandLineRunner {
 	public void run(String... args) throws Exception {
            
 		System.out.println("======================  ARX Backend  Start ==========================");
-		  // Define data
+		  
+		// final List<List<String>> inputDataArray = new ArrayList<List<String>>();
+		// ArrayList<String> inputRowData; 
+		// inputRowData = new ArrayList<String>();
+		// inputRowData.add("age"); inputRowData.add("gender"); inputRowData.add( "zipcode"); inputDataArray.add(inputRowData);
+		// inputRowData = new ArrayList<String>();
+		// inputRowData.add("34"); inputRowData.add("male");    inputRowData.add( "81667"); inputDataArray.add(inputRowData);
+		// inputRowData = new ArrayList<String>();
+		// inputRowData.add("45"); inputRowData.add("female");  inputRowData.add( "81675"); inputDataArray.add(inputRowData);
+		// inputRowData = new ArrayList<String>();
+		// inputRowData.add("66"); inputRowData.add("male");    inputRowData.add( "81925"); inputDataArray.add(inputRowData);
+		// inputRowData = new ArrayList<String>();
+		// inputRowData.add("70"); inputRowData.add("female");  inputRowData.add( "81931"); inputDataArray.add(inputRowData);
+		// inputRowData = new ArrayList<String>();
+		// inputRowData.add("34"); inputRowData.add("female");  inputRowData.add( "81931"); inputDataArray.add(inputRowData);
+		// inputRowData = new ArrayList<String>();
+		// inputRowData.add("70"); inputRowData.add("male");    inputRowData.add( "81931"); inputDataArray.add(inputRowData);
+		// inputRowData = new ArrayList<String>();
+		// inputRowData.add("45"); inputRowData.add("male");    inputRowData.add( "81931"); inputDataArray.add(inputRowData);
+     
+		
+		// Define data
 		  DefaultData data = Data.create();
+
+		//   String[] inputRowDataTmp;
+		//   for (int i = 0; i< inputDataArray.size(); i++ ){
+		// 	inputRowDataTmp = new String [inputDataArray.get(i).size()];
+		// 	// System.out.println(i + " : " + inputDataArray.get(i));
+		// 	for (int j = 0; j< inputRowDataTmp.length; j++ ){
+		// 		inputRowDataTmp[j] = inputDataArray.get(i).get(j);
+
+		//     }
+		// 	 System.out.println(inputRowDataTmp);
+		// 	data.add(inputRowDataTmp);
+		//   }
 		  data.add("age", "gender", "zipcode");
 		  data.add("34", "male", "81667");
 		  data.add("45", "female", "81675");
@@ -107,32 +142,32 @@ public class SbBeApplication implements CommandLineRunner {
 		System.out.println("======================  ARX Backend  Complete ==========================");
 
 
-		Emp emp1 = Emp.builder()
+		Pat pat1 = Pat.builder()
 					.id(11)
 					.name("aaaaa")
 					.age(10)	
 					.build();	
-		empRepo.save(emp1);													
+		patRepo.save(pat1);													
 
-		Emp emp2 = Emp.builder()
+		Pat pat2 = Pat.builder()
 					.id(22)
 					.name("bbbbb")
 					.age(20)	
 					.build();									
-		empRepo.save(emp2);													
-		Emp emp3 = Emp.builder()
+		patRepo.save(pat2);													
+		Pat pat3 = Pat.builder()
 					.id(33)
 					.name("cccc")
 					.age(30)	
 					.build();		
-		empRepo.save(emp3);		
+		patRepo.save(pat3);		
 		
 		
     
 		// String[] tblHead = new String[] { "aaa","bbb","ccc"};
         // arxData.addRow(tblHead);
         System.out.println(" - Transmitted data:");
-		System.out.println(" empRepo: " + empRepo); 
+		System.out.println(" patRepo: " + patRepo); 
 		System.out.println(" arxRepo: " + arxRepo); 
 
 		Iterator<String[]> arxResultIterator = result.getOutput(false).iterator();
