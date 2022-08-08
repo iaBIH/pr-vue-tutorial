@@ -13,8 +13,19 @@ Part of practical tutorials for full stack development:
     - [GETTING STARTED with VueJS](https://academind.com/tutorials/vuejs-learning-the-basics)
     - [Vue.js Course for Beginners](https://www.youtube.com/watch?v=FXpIoQ_rT_c)
     - [Vue JS Crash Course](https://www.youtube.com/watch?v=qZXt1Aom3Cs&t=716s)
+  - Next TODOS:
+    - Test in Windows and Mac
+      - Write build instructions
+      - Run as web app and desktop app
+    - Send data from frontend to backend!
+    - Secure the transmitted data
+    - Send files: e.g. upload data file and send it to arx then get the result as file 
+    - Add more UI elements!
+    - Add more CSS customisation!   
+    - Add Charting
+    - Test in a real server!
 
-
+    
 11:58 / 1:50:51
 
 •
