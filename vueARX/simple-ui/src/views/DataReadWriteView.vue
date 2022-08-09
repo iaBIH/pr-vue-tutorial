@@ -22,25 +22,39 @@
 
           <ArxTable />  
 
-   <h2>Patients Data</h2>
+   <button class="btnSave" v-on:click="saveArxResult()">Save as CSV file</button>
+   <br>
+   <!-- {{arxDataArray}} -->
+   <!-- <h2>Patients Data</h2>
 
-       <PatTable />  
+       <PatTable />   -->
   
   </div>
 </template>
 
 <script>
+//TODOs:
+//   add download result button
+//   parse and use the data in java 
+
+
 import axios from 'axios';
 import ArxTable from '@/components/ArxTable.vue'
-import PatTable from '@/components/PatTable.vue'
+// import PatTable from '@/components/PatTable.vue'
 import TextReader from '@/components/TextReader.vue'
+import ArxService from '@/services/ArxService.js'
+
 
 export default {
     name: "AboutView",
-    data: () => ({ text: "" }),
+    data: () => ({ 
+      text : "",
+      arxDataArray : [],
+      arxDataText : ""
+    }),
     components: { 
        ArxTable,
-       PatTable,
+      //  PatTable,
        TextReader 
     },
     methods: {
@@ -49,6 +63,24 @@ export default {
           body: this.text
           })  
           // this.textData = this.calcoperation
+        },
+        saveArxResult(){
+           ArxService.getArxData().then( 
+                    (response) =>{
+                       this.arxDataArray = response.data;
+           });
+           this.arxDataText=JSON.stringify(this.arxDataArray)
+           
+           // call save file 
+           const data = JSON.stringify(this.arxDataArray)
+           const blob = new Blob([data], {type: 'text/plain'})
+           const e = document.createEvent('MouseEvents'),
+           a = document.createElement('a');
+           a.download = "arx_result.json";
+           a.href = window.URL.createObjectURL(blob);
+           a.dataset.downloadurl = ['text/json', a.download, a.href].join(':');
+           e.initEvent('click', true, false, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null);
+           a.dispatchEvent(e);
         },
         created(){
           this.processInputData()
