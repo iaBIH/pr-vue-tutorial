@@ -1,33 +1,62 @@
 
-- Install yarn
-   
-      curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add -
-      echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list
-      sudo apt update 
-      sudo apt install -y yarn
-      echo "export PATH=$PATH:~/.config/yarn/global/node_modules/.bin" >> ~/.bashrc
+# Developer Guide: 
 
-- Install node
+- Download and install recent JAVA JDK e.g.
+  - https://download.oracle.com/java/18/latest/jdk-18_windows-x64_bin.msi
 
-      curl -fsSL https://deb.nodesource.com/setup_16.x | sudo -E bash -
-      sudo apt-get install -y nodejs
-      node -v
+- Download and install recent node tool e.g. 
+   - https://nodejs.org/dist/v16.16.0/node-v16.16.0-x64.msi
+
+ 
           
-- Install Vue
+- Download and install recent yarn tool e.g.
+   - https://github.com/yarnpkg/yarn/releases/download/v1.22.4/yarn-1.22.4.msi
+   - after that you should be able to run yarn in windows terminal 
+- Install Vue 
+  - in windows terminal run:
+  
+        yarn global add @vue/cli
+        vue --version
 
-      yarn global add @vue/cli
-      vue --version
 
-- Create a website
-   
-      vue create myFirstWebApp
+# Compile the project:
 
-- Run the website in a local webserver
-       
-       cd myFirstWebApp
+  - open a windows terminal CMD and change to the vue project folder e.g.:
+
+        cd vueARX\simple-ui
+
+     
+  - first install dependencies 
+  
+         yarn install   
+  
+  - to run the desktop app
+
+         yarn electron:serve
+
+  - to build the executable app
+
+         yarn electron:build
+
+    the executable setup file can be found in dist_electron folder 
+
+
+# Create a new vue project with java backend for ARX   
+
+## Create a vue app 
+
+- Create a folder tree for the project e.g. vueARX  
+- inside vueARX folder, create a new vue project from a template by running 
+
+      cd vueARX
+      vue create simple-ui       
+
+- Run the created website in a local webserver       
+     
+       cd simple-ui
        yarn serve
-
-    this will run the web site at http://localhost:8080/    
+ 
+   this will run the web site at http://localhost:8080/    
 
 - Build the website for deployment
 
@@ -35,27 +64,32 @@
 
     this creates a dist folder that can be deployed to another computer    
  
-- Create a desktop app from a website using electron
+### Create a desktop app from a website using electron
 
-       vue add electron-builder -mwl
+  - to build a desktop app:
+   
+        vue add electron-builder -mwl
        
-    to run the desktop app
+- to run the desktop app:
+  
+         yarn electron:serve 
 
-       yarn electron:serve 
-
-    to build the desktop app for deployment   
+- to build the desktop app for deployment   
        
        yarn electron:build
 
-    to build for different system : you need to compile at different systems:
+- to build for different system : you need to compile e.g.
 
-       // first install dependencies 
+  first install dependencies 
+  
        yarn install   
-       // build the executable app
-       yarn build
+  
+  then build the executable app
+
+       yarn electron:build
 
 
-# To connect with java:
+## Create a springboot project:
 
 First create a Spring Boot Project 
  

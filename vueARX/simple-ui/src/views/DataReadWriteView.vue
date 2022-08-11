@@ -34,8 +34,9 @@
 
 <script>
 //TODOs:
-//   add download result button
-//   parse and use the data in java 
+//   use input file name for saving
+//   save as csv file 
+//   parse and use the input data in java 
 
 
 import axios from 'axios';
