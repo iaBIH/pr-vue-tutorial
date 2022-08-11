@@ -6,9 +6,7 @@
 
 - Download and install recent node tool e.g. 
    - https://nodejs.org/dist/v16.16.0/node-v16.16.0-x64.msi
-
- 
-          
+        
 - Download and install recent yarn tool e.g.
    - https://github.com/yarnpkg/yarn/releases/download/v1.22.4/yarn-1.22.4.msi
    - after that you should be able to run yarn in windows terminal 
