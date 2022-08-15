@@ -1,26 +1,23 @@
 // Ref https://www.youtube.com/watch?v=hDC_kNlzz6c
-package net.javaguides.sbBE;
+package bih.sbBE;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.Bean;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
-import com.google.common.collect.Iterators;
-
-import net.javaguides.sbBE.entity.ArxData;
-import net.javaguides.sbBE.entity.Pat;
-import net.javaguides.sbBE.repo.ArxRepo;
-import net.javaguides.sbBE.repo.PatRepo;
-
+import bih.sbBE.entity.ArxData;
+import bih.sbBE.entity.Pat;
+import bih.sbBE.repo.ArxRepo;
+import bih.sbBE.repo.PatRepo;
 
 //ARX
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
-import java.util.List;
-
 import org.deidentifier.arx.ARXAnonymizer;
 import org.deidentifier.arx.ARXConfiguration;
 import org.deidentifier.arx.ARXResult;
@@ -36,6 +33,17 @@ public class SbBeApplication implements CommandLineRunner {
 
 	public static void main(String[] args) throws IOException {
 		SpringApplication.run(SbBeApplication.class, args);
+	}
+    // Alloe CROC
+	@Bean
+	public WebMvcConfigurer corsConfigurer() {
+		return new WebMvcConfigurer() {
+			@Override
+			public void addCorsMappings(CorsRegistry registry) {
+				registry.addMapping("/api/arx").allowedOrigins("app://.", "http://127.0.0.1:8080","http://localhost:8080");
+
+			}
+		};
 	}
 
 	@Autowired

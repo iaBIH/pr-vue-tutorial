@@ -1,4 +1,4 @@
-package net.javaguides.sbBE.entity;
+package bih.sbBE.entity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;

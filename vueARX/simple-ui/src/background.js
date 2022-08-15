@@ -26,7 +26,21 @@ var menu = Menu.buildFromTemplate([
            // ]
         }
       ]
-  }
+  },
+  {
+    label: 'View',
+    submenu: [
+      { role: 'reload' },
+      { role: 'forceReload' },
+      { role: 'toggleDevTools' },
+      { type: 'separator' },
+      { role: 'resetZoom' },
+      { role: 'zoomIn' },
+      { role: 'zoomOut' },
+      { type: 'separator' },
+      { role: 'togglefullscreen' }
+    ]
+  },
 ])
 Menu.setApplicationMenu(menu);
 async function createWindow() {
@@ -38,7 +52,9 @@ async function createWindow() {
     // frame: false,
     webPreferences: {
       // disable devtools
-      devTools: false,
+      devTools: true,
+      port: 8080,
+      loggerPort: 9001,
       // Use pluginOptions.nodeIntegration, leave this alone
       // See nklayman.github.io/vue-cli-plugin-electron-builder/guide/security.html#node-integration for more info
       nodeIntegration: process.env.ELECTRON_NODE_INTEGRATION,

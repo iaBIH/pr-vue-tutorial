@@ -1,4 +1,4 @@
-package net.javaguides.sbBE.control;
+package bih.sbBE.control;
 
 import java.util.List;
 
@@ -8,12 +8,14 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import net.javaguides.sbBE.entity.Pat;
-import net.javaguides.sbBE.repo.PatRepo;
+import bih.sbBE.entity.Pat;
+import bih.sbBE.repo.PatRepo;
 
 @RestController
 @RequestMapping("/api")
-@CrossOrigin("http://localhost:8080")
+//@CrossOrigin("http://localhost:8080")
+@CrossOrigin("app://.")
+
 public class PatControl  {
     
     @Autowired

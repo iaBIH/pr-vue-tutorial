@@ -1,9 +1,8 @@
-package net.javaguides.sbBE.repo;
+package bih.sbBE.repo;
 
-import net.javaguides.sbBE.entity.Pat;
-
- 
 import org.springframework.data.jpa.repository.JpaRepository;
+
+import bih.sbBE.entity.Pat;
 
 public interface PatRepo extends JpaRepository<Pat, Long>{
  
