@@ -34,7 +34,7 @@ public class SbBeApplication implements CommandLineRunner {
 	public static void main(String[] args) throws IOException {
 		SpringApplication.run(SbBeApplication.class, args);
 	}
-    // Alloe CROC
+    // Allow CROC
 	@Bean
 	public WebMvcConfigurer corsConfigurer() {
 		return new WebMvcConfigurer() {

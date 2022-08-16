@@ -47,7 +47,9 @@
   - to build the executable app
 
          yarn electron:build
-
+         # to build for windows
+         yarn electron:build --win nsis  
+           
     the executable setup file can be found in dist_electron folder 
     
 # Create a new vue project with java backend for ARX   
@@ -95,7 +97,11 @@
   
   then build the executable app
 
-       yarn electron:build
+         yarn electron:build
+         # to build for windows
+         yarn electron:build --win nsis  
+
+By default build for current platform and current arch. Use CLI flags --mac, --win, --linux to specify platforms. And --ia32, --x64 to specify arch.
 
 ## Create a springboot project:
 
