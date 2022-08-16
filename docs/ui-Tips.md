@@ -2,6 +2,10 @@
 
 ## Using different components (properties and events)
 
+Check if there is a UI designer for HTML
+
+Check [Semantic UI Vue](https://semantic-ui-vue.github.io)
+
 - buttons:
   - button with icon
 - dropbox
@@ -55,3 +59,6 @@ https://medium.com/bb-tutorials-and-thoughts/how-to-develop-and-build-vue-js-app
 Use Arx API: 
   - Run arx Example1 by reading data file
   - Display the result
+  
+
+  

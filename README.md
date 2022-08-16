@@ -2,38 +2,41 @@
 Part of practical tutorials for full stack development:
 
 - **Vue:**
-  - [Linux](https://github.com/iaBIH/pr-vue-tutorial/blob/main/Ubuntu.md)
-  - [Windows]()
-  - [Mac]()
-  - Comparison vs Google Angular and Facebook React:
-    - https://www.codeinwp.com/blog/angular-vs-vue-vs-react/
-    - https://v2.vuejs.org/v2/guide/comparison.html
-  - Popular platforms use Vue e.g. Gitlab, Airbnb. Less popular (Proskive).  
-  - Tutorials:
-    - [GETTING STARTED with VueJS](https://academind.com/tutorials/vuejs-learning-the-basics)
-    - [Vue.js Course for Beginners](https://www.youtube.com/watch?v=FXpIoQ_rT_c)
-    - [Vue JS Crash Course](https://www.youtube.com/watch?v=qZXt1Aom3Cs&t=716s)
-  - Next TODOS:
-    - Test in Windows and Mac
-      - Write build instructions
-      - Run as web app and desktop app
-    - Send data from frontend to backend!
-      - the current commit send a string, next: try to send a complete text file        
-    - Secure the transmitted data
-    - Send files: e.g. upload data file and send it to arx then get the result as file 
-    - Add more UI elements!
-    - Add more CSS customisation!   
-    - Add Charting
-    - Test in a real server!
-
-    
-11:58 / 1:50:51
-
-•
-User Generator Mini Project (CDN)
-
-
-]
+    - [Linux](https://github.com/iaBIH/pr-vue-tutorial/blob/main/Ubuntu.md)
+    - [Windows]()
+    - [Mac]()
+    - Comparison vs Google Angular and Facebook React:
+        - https://www.codeinwp.com/blog/angular-vs-vue-vs-react/
+        - https://v2.vuejs.org/v2/guide/comparison.html
+    - Popular platforms use Vue e.g. Gitlab, Airbnb. Less popular (Proskive).
+    - Tutorials:
+        - [GETTING STARTED with VueJS](https://academind.com/tutorials/vuejs-learning-the-basics)
+        - [Vue.js Course for Beginners](https://www.youtube.com/watch?v=FXpIoQ_rT_c)
+        - [Vue JS Crash Course](https://www.youtube.com/watch?v=qZXt1Aom3Cs&t=716s)
+        - [Building Desktop Apps With Electron And Vue](https://www.smashingmagazine.com/2020/07/desktop-apps-electron-vue-javascript/)
+    - Next TODOS:
+        - Add simple functionality:
+	     - [x] Read input data and herarchies and
+	     - [ ] Parse the input data at the backend
+	     - [x] Apply anonymisation on the input data
+	     - [x] Display the result
+	     - [ ] Save the result as csv file
+	   - [ ] Start backend service when the app pruns 
+	   - [ ] Use specific ports e.g. 3000 and 3001 
+	   - Test in Windows and Mac
+	    - [x] Write build instructions
+	    - [x] Run as web app and desktop app
+	   - the current commit send a string, next: try to send a complete text file
+	   - Secure the transmitted data
+	   - Send files: e.g. upload data file and send it to arx then get the result as file 
+	   - Add more UI elements!
+	   - Add more CSS customisation! 
+	   - Add Charting
+	   - Test in a real server!	   
+	- Check similar work e.g.:
+		  - [Anonymization_as_a_Service_Thesis](https://oslomet-arx-as-a-service.github.io/resources/Anonymization_as_a_Service_Thesis.pdf)
+		  - [arxaas](https://github.com/navikt/arxaas)
+		  - [pyarxaas](https://github.com/navikt/pyarxaas)	   
 - **GraphQL:**
 - **Prisma:**
 - **Mongo:**
