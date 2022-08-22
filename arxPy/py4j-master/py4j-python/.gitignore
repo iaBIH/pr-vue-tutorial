@@ -1,0 +1,11 @@
+*.pyc
+doc/
+*.swp
+*.tox/
+tags
+dist/
+MANIFEST
+py4j-java/
+py4j.egg-info/
+/build
+.cache

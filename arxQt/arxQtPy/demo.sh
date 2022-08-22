@@ -4,4 +4,4 @@
 
 java -jar  arxaas-2022-RELEASE.jar &
 
-python3  MainWindow.py
+python3  arxQt.py

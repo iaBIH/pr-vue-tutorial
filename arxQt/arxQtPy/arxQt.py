@@ -42,9 +42,26 @@ class MainWindow(QtWidgets.QWidget):
         self.window .resize(800, 600)
         self.window .show()
 
-        self.btnRun = self.window.findChild(QtWidgets.QPushButton,'btnRun')
-
+        self.btnRun     = self.window.findChild(QtWidgets.QPushButton,'btnRun')
         self.btnRun.clicked.connect(self.btnRunClick)
+
+        self.btnOpen     = self.window.findChild(QtWidgets.QPushButton,'btnOpen')
+        self.btnOpen.clicked.connect(self.btnOpenClick)
+       
+        self.txtlInput   = self.window.findChild(QtWidgets.QLineEdit,   'txtlInput')
+        self.txtInput   = self.window.findChild(QtWidgets.QTextBrowser,'txtInput')
+        self.txtOutput  = self.window.findChild(QtWidgets.QTextBrowser,'txtOutput')
+
+  
+    @QtCore.Slot()
+    def btnOpenClick(self):
+       dataFnm = QtWidgets.QFileDialog.getOpenFileName()[0]
+       print(dataFnm)
+       self.txtlInput.setText(dataFnm)
+       
+    #    dataFnm =  os.path.join(self.appPath,"data2.csv")
+       self.data_df = pd.read_csv(dataFnm, sep=";")
+       self.txtInput.setText(self.data_df.to_string())
 
  
 
@@ -56,73 +73,68 @@ class MainWindow(QtWidgets.QWidget):
         # # run arxas server
         # os.system("java -jar  arxaas-2022-RELEASE.jar")
         
-        self.txtInput = self.window.findChild(QtWidgets.QTextBrowser,'txtInput')
-        self.txtOutput = self.window.findChild(QtWidgets.QTextBrowser,'txtOutput')
+
 
         self.txtInput.setText("text input")
         self.txtOutput.setText("text output")
         # TODO:
-        # use arx demo
+        # use arx jar lib 
 
-        # set logging level to INFO to show pyARXaas logging
+        # # set logging level to INFO to show pyARXaas logging
         logging.basicConfig(level=logging.INFO)
 
         arxaas = ARXaaS('http://localhost:8080/') # connecting to online service
 
-        """#### fetch sensitive data"""
-        dataFnm = os.path.join(self.appPath,"data2.csv")
-        data_df = pd.read_csv(dataFnm, sep=";")
-        self.txtInput.setText(data_df.to_string())
+        # """#### fetch sensitive data"""
+        # dataFnm = os.path.join(self.appPath,"data2.csv")
+        # data_df = pd.read_csv(dataFnm, sep=";")
+        # self.txtInput.setText(data_df.to_string())
+
+        data_df = self.data_df 
 
         zipHFnm = os.path.join(self.appPath,"data2_zipcode_hierarchy.csv")
         ageHFnm = os.path.join(self.appPath,"data2_age_hierarchy.csv")
         diseaseHFnm = os.path.join(self.appPath,"data2_disease_hierarchy.csv")
 
-        zipcode_hierarchy = pd.read_csv(zipHFnm, sep=";", header=None)
-        age_hierarchy = pd.read_csv(ageHFnm, sep=";", header=None)
-        disease_hierarchy = pd.read_csv(diseaseHFnm, sep=";", header=None)
 
 
-        """### Create Dataset"""
+        # """### Create Dataset"""
 
         dataset = Dataset.from_pandas(data_df)
         dataset.describe()
 
-        """### Set the AttributeType for the dataset fields"""
+        # """### Set the AttributeType for the dataset fields"""
 
         dataset.set_attribute_type(AttributeType.IDENTIFYING, 'salary')
 
-        """### Set Generalization Hierarchies
-        Note that if the hierarchy does not have a header row in the csv file, please set header=None in read_csv() or the first row will be interpreted as a header and ARXaaS will throw an exception for the missing hierarchy data.
-        """
+        # """### Set Generalization Hierarchies
+        # Note that if the hierarchy does not have a header row in the csv file, please set header=None in read_csv() or the first row will be interpreted as a header and ARXaaS will throw an exception for the missing hierarchy data.
+        # """
 
-        dataset.set_hierarchy("age", age_hierarchy)
-        dataset.set_hierarchy("zipcode", zipcode_hierarchy)
-        dataset.set_hierarchy("disease", disease_hierarchy)
+        dataset.set_hierarchy("age",     pd.read_csv(ageHFnm,     sep=";", header=None))
+        dataset.set_hierarchy("zipcode", pd.read_csv(zipHFnm,     sep=";", header=None))
+        dataset.set_hierarchy("disease", pd.read_csv(diseaseHFnm, sep=";", header=None))
 
-        """### Create Privacy Models"""
+        # """### Create Privacy Models"""
 
         kanon = KAnonymity(2)
 
-        """### Create Risk Profile"""
+        # """### Create Risk Profile"""
 
         risk_profile = arxaas.risk_profile(dataset)
-
         risk_profile.re_identification_risk
-
         risk_profile.distribution_of_risk_dataframe().head()
 
-        """## Anonymize"""
+        # """## Anonymize"""
 
         anon_result = arxaas.anonymize(dataset, [kanon])
-
         anon_result.dataset.to_dataframe()
-
-        """#### Anonymization Status"""
+        
+        # """#### Anonymization Status"""
 
         print(anon_result.anonymization_status)
 
-        """#### RiskProfile for the anonymized dataset"""
+        # """#### RiskProfile for the anonymized dataset"""
 
         anon_rp = anon_result.risk_profile
         

@@ -1,0 +1,23 @@
+/classes/
+/bin/
+/javadoc/
+*.swp
+.ant-targets-build.xml
+/dist/
+/junit/
+py4j*.jar
+target/
+*.asc
+bundle.jar
+/out/
+
+### Gradle ###
+.gradle
+/build/
+
+# Ignore Gradle GUI config
+gradle-app.setting
+
+# Avoid ignoring Gradle wrapper jar file (.jar files are usually ignored)
+!gradle-wrapper.jar
+
