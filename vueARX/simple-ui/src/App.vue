@@ -11,7 +11,9 @@
     <router-link to="/configtransform">Configure transformation</router-link> |
     <router-link to="/exploreresults">Explore results</router-link> |
     <router-link to="/analyzeutility">Analyze utility</router-link> |
-    <router-link to="/analyzerisk">Analyze risk</router-link> 
+    <router-link to="/analyzerisk">Analyze risk</router-link> |
+    <router-link to="/py">Python backend</router-link> 
+
   </nav>  
  <router-view/>
     <EmpTable />

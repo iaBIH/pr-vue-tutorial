@@ -1,0 +1,84 @@
+name: Deploy to prod on release
+
+on:
+  release:
+    types: [published]
+env:
+  DOCKER_IMAGE: docker.pkg.github.com/${{ github.repository }}/arxaas
+
+jobs:
+
+  publish_to_docker:
+    name: Build 🏗️ and publish to docker 🐳 
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set JDK to 11
+        uses: actions/setup-java@v1
+        with:
+          java-version: 1.11
+      - name: Download and cache dependencies
+        run: wget  https://arx.deidentifier.org/?ddownload=1924 -O libarx-3.8.0.jar
+      - name: Maven install libarx as local dependency
+        run: mvn -q install:install-file -Dfile=libarx-3.8.0.jar -DgroupId=org.deidentifier -DartifactId=libarx -Dversion=3.8.0 -Dpackaging=jar
+      - name: Resolve dependencies, plugins, reports
+        run: mvn dependency:go-offline
+      - name: Create and store version tag
+        run: |
+          TIME=$(TZ="Europe/Oslo" date +%Y.%m.%d-%H.%M)
+          COMMIT=$(git rev-parse --short=12 HEAD)
+          VERSION="$TIME-$COMMIT"
+          echo "version $VERSION"
+          echo $VERSION > docker_img_tag.txt
+      - name: Set version in pom
+        run: |
+          mvn versions:set -DnewVersion="$(cat docker_img_tag.txt)"
+          mvn versions:commit
+      - name: Run test 🧪 and package 📦
+        run: mvn package
+        env:
+          CI: true
+      - name: Upload img tag
+        uses: actions/upload-artifact@v1
+        with:
+          name: img_tag
+          path: docker_img_tag.txt
+      - name: Setup image env
+        run: |
+          VALUE=${DOCKER_IMAGE}:$(cat docker_img_tag.txt)
+          echo ${VALUE}
+          echo ::set-env name=IMAGE::${VALUE}
+          echo ${IMAGE}
+      - name: Build 🏗️ and publish Docker image 🐳
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          docker build --tag ${IMAGE} .
+          docker login docker.pkg.github.com -u ${GITHUB_REPOSITORY} -p ${GITHUB_TOKEN}
+          docker push ${IMAGE}
+
+  deploy_to_prod-fss:
+    name: Deploy to prod-fss 🚀
+    needs: [publish_to_docker]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          ref: refs/heads/master
+      - name: Download image tag
+        uses: actions/download-artifact@v1
+        with:
+          name: img_tag
+      - name: Setup image env
+        run: |
+          VALUE=${DOCKER_IMAGE}:$(cat img_tag/docker_img_tag.txt)
+          echo ${VALUE}
+          echo ::set-env name=IMAGE::${VALUE}
+          echo ${IMAGE}
+  #    - name: Deploy to nais 🚀
+  #      uses: nais/deploy/actions/deploy@v1
+  #      env:
+  #        APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
+  #        CLUSTER: prod-fss
+  #        RESOURCE: naiserator.yml
+  #        VARS: config-prod-fss.json

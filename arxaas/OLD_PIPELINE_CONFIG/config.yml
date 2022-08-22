@@ -1,0 +1,253 @@
+# Java Maven CircleCI 2.0 configuration file
+#
+# check https://circleci.com/docs/2.0/language-java/ for more details
+#
+version: 2.1
+orbs:
+  nais: 'navikt/nais-deployment@1.1.1'
+jobs:
+  build:
+    docker:
+      # specify the version you desire here
+      - image: circleci/openjdk:11-jdk
+
+    working_directory: ~/repo
+
+    environment:
+      # customize the JVM maximum heap limit
+      MAVEN_OPTS: -Xmx3200m
+
+    steps:
+      - checkout
+      # download and cache dependencies
+      - restore_cache:
+          keys:
+            - v1-dependencies-{{ checksum "pom.xml" }}
+            # fallback to using the latest cache if no exact match is found
+            - v1-dependencies-
+
+      # download libarx
+      - run: wget  https://arx.deidentifier.org/?ddownload=1924 -O libarx-3.8.0.jar
+      # maven install libarx as local dependency
+      - run: mvn -q install:install-file -Dfile=libarx-3.8.0.jar -DgroupId=org.deidentifier -DartifactId=libarx -Dversion=3.8.0 -Dpackaging=jar
+
+      # prepare code climate test reporter
+      - run: curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
+      - run: chmod +x ./cc-test-reporter
+      - run: ./cc-test-reporter before-build
+
+      # resolve dependencies, plugins, reports
+      - run: mvn dependency:go-offline
+
+      - save_cache:
+          paths:
+            - ~/.m2
+          key: v1-dependencies-{{ checksum "pom.xml" }}
+
+      - run:
+          name: Create and store version tag
+          command: |
+            TIME=$(TZ="Europe/Oslo" date +%Y.%m.%d-%H.%M)
+            COMMIT=$(git rev-parse --short=12 HEAD)
+            VERSION="$TIME-$COMMIT"
+            echo "version $VERSION"
+            mkdir img_tag
+            echo $VERSION >> img_tag/docker_img_tag
+            echo 'export TAG=`cat img_tag/docker_img_tag`' >> $BASH_ENV
+      - run: |
+          echo $TAG
+      - run:
+          name: Set version in pom
+          command: |
+            mvn versions:set -DnewVersion="$TAG"
+            mvn versions:commit
+      # run all tests!
+      - run: mvn package
+
+      # run code climate test reporter and upload
+      - run: JACOCO_SOURCE_PATH=src/main/java ./cc-test-reporter format-coverage -d ./target/site/jacoco/jacoco.xml --input-type jacoco
+      - run: ./cc-test-reporter upload-coverage -d
+
+      - persist_to_workspace:
+          root: target
+          paths: ./*
+      - persist_to_workspace:
+          root: img_tag
+          paths: ./docker_img_tag
+
+  publish-docs:
+    docker:
+      - image: node:8.10.0
+    steps:
+      - checkout
+      # Attach workspace containing generated docs
+      - attach_workspace:
+          at: target
+      - run:
+          name: Install and configure dependencies
+          command: |
+            npm install -g --silent gh-pages@2.0.1
+            git config user.email $GITHUB_PAGES_EMAIL
+            git config user.name "ci-build"
+      - run:
+          name: Deploy docs to gh-pages branch
+          # Add message [ci skip] to stop circle ci running the commit
+          command: gh-pages --dist target/generated-docs --message "[ci skip]"
+
+  publish-to-dockerhub:
+    docker:
+      - image: circleci/openjdk:11-jdk
+    working_directory: ~/repo
+    steps:
+      - checkout
+      - attach_workspace:
+          at: target
+      - attach_workspace:
+          at: img_tag
+      - run:
+          name: Create version tag env variable
+          command: |
+            echo 'export TAG=`cat img_tag/docker_img_tag`' >> $BASH_ENV
+      - run: |
+          echo $TAG
+      - setup_remote_docker:
+          docker_layer_caching: true
+      - run: |
+          docker login -u $DOCKER_LOGIN -p $DOCKER_PASSWORD
+      - run: docker build -t navikt/arxaas:$TAG .
+      - run: docker tag navikt/arxaas:$TAG navikt/arxaas:latest
+      - run: docker push navikt/arxaas:$TAG
+      - run: docker push navikt/arxaas:latest
+
+  publish-to-maven:
+    docker:
+      # specify the version you desire here
+      - image: circleci/openjdk:11-jdk
+
+    working_directory: ~/repo
+
+    environment:
+      # customize the JVM maximum heap limit
+      MAVEN_OPTS: -Xmx3200m
+
+    steps:
+      - checkout
+      - attach_workspace:
+          at: target
+      - attach_workspace:
+          at: img_tag
+      # download and cache dependencies
+      - restore_cache:
+          keys:
+            - v1-dependencies-{{ checksum "pom.xml" }}
+            # fallback to using the latest cache if no exact match is found
+            - v1-dependencies-
+      - run:
+          name: Import gpg key
+          command: echo $GPG_KEY_BASE64 | base64 --decode | gpg --yes --batch --import
+      - run:
+          name: "Setting version"
+          command: |
+            VERSION=`cat img_tag/docker_img_tag`
+            mvn versions:set -DnewVersion="$VERSION"
+            mvn versions:commit
+      - run:
+          name: Deploy to Maven Central
+          command: "export GPG_TTY=$(tty) && mvn --settings .maven.xml deploy -Dmaven.test.skip=true -Dmaven.install.skip=true -B -P release"
+
+  deploy-dev:
+    docker:
+      - image: "navikt/deployment-cli:v0.1.7"
+    working_directory: ~/repo
+    steps:
+      - checkout
+      - attach_workspace:
+          at: target
+      - attach_workspace:
+          at: img_tag
+      - run:
+          name: Checkout NAIS config repository
+          command: git clone https://github.com/navikt/arxaas-nais-config.git
+      - run:
+          name: Create github deployment for dev-fss
+          command: deployment-cli deploy create
+                    --cluster=dev-fss
+                    --repository=navikt/arxaas
+                    --team=$TEAMNAME
+                    --resource=arxaas-nais-config/arxaas-nais.yaml
+                    --version=`cat img_tag/docker_img_tag`
+                    --vars=arxaas-nais-config/arxaas-nais-dev-placeholders.json
+  deploy-prod:
+    docker:
+      - image: "navikt/deployment-cli:v0.1.7"
+    working_directory: ~/repo
+    steps:
+      - checkout
+      - attach_workspace:
+          at: target
+      - attach_workspace:
+          at: img_tag
+      - run:
+          name: Checkout NAIS config repository
+          command: git clone https://github.com/navikt/arxaas-nais-config.git
+      - run:
+          name: Create github deployment for prod-fss
+          command: deployment-cli deploy create
+            --cluster=prod-fss
+            --repository=navikt/arxaas
+            --team=$TEAMNAME
+            --resource=arxaas-nais-config/arxaas-nais.yaml
+            --version=`cat img_tag/docker_img_tag`
+            --vars=arxaas-nais-config/arxaas-nais-prod-placeholders.json
+
+workflows:
+  version: 2
+  build_and_release:
+    jobs:
+      - build:
+          filters:
+            tags:
+              only: /.*/
+      - publish-docs:
+          requires:
+            - build
+          filters:
+            branches:
+              only: master
+      - publish-to-dockerhub:
+          requires:
+            - build
+          filters:
+            tags:
+              only: /.*/
+            branches:
+              only: master
+      - deploy-dev:
+          requires:
+            - build
+            - publish-to-dockerhub
+          filters:
+            tags:
+              only: /.*/
+            branches:
+              only: master
+      - publish-to-maven:
+          requires:
+            - build
+            - publish-to-dockerhub
+          context: Maven Central Release
+          filters:
+            tags:
+              only: /[0-9]+(\.[0-9]+)*$/
+            branches:
+              ignore: /.*/
+      - deploy-prod:
+          requires:
+            - build
+            - publish-to-dockerhub
+            - publish-to-maven
+          filters:
+            tags:
+              only: /[0-9]+(\.[0-9]+)*$/
+            branches:
+              ignore: /.*/

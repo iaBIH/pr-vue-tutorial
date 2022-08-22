@@ -33,6 +33,11 @@ const routes = [
     component: () => import(/* webpackChunkName: "analyze_risk" */ '../views/AnalyzeRiskView.vue')
   }, 
   {
+      path: '/py',
+      name: 'py-view',
+      component: () => import(/* webpackChunkName: "pyview" */ '../components/PyView.vue')
+    },
+  {
     path: '/about',
     name: 'about',
     // route level code-splitting
