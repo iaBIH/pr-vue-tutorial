@@ -1,0 +1,1 @@
+window.__ENV = {"REACT_APP_ARXAAS_URL":"http://localhost:8080"};

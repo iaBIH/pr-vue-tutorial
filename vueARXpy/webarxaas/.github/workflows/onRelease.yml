@@ -1,0 +1,24 @@
+name: Deploy to prod on release
+
+on:
+  release:
+    types: [published]
+env:
+  IMAGE: docker.pkg.github.com/${{ github.repository }}/webarxaas:${{ github.sha }}
+
+jobs:
+  deploy_prod-fss:
+    name: Deploy to prod-fss
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        ref: refs/heads/master
+    - name: Deploy to nais
+      run: echo "deploy is turned off"
+#      uses: nais/deploy/actions/deploy@v1
+#      env:
+#        APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
+#        CLUSTER: prod-fss
+#        RESOURCE: naiserator.yml
+#        VARS: config-prod-fss.json
