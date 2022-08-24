@@ -32,8 +32,13 @@ class MainWindow(QtWidgets.QWidget):
         # self.button.clicked.connect(self.magic)
 
         self.loader = QUiLoader()
+        # determine if application is a script file or frozen exe
+        if getattr(sys, 'frozen', False):
+            self.appPath = os.path.dirname(sys.executable)
+        elif __file__:
+            self.appPath = os.path.dirname(__file__)
 
-        self.appPath = os.path.dirname(os.path.abspath(__file__))
+        # self.appPath = os.path.dirname(os.path.abspath(__file__))
 
         self.uiFnm = os.path.join(self.appPath,"MainWindow.ui")
  
